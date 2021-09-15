@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  keycloak:
+    build: 
+      context: ./.docker/keycloak
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_USER=postgres
+      - DB_PASSWORD=123
+      - DB_VENDOR=postgres
+      - DB_ADDR=192.168.0.50
+      - DB_PORT=5432
+      - DB_DATABASE=fin
+
+  db:
+    build: 
+      context: ./.docker/mysql
+      dockerfile: Dockerfile    
+    restart: always
+    tty: true
+    volumes: 
+      - ./.docker/mysql/dbdata:/var/lib/mysql
+    environment: 
+      - MYSQL_DATABASE=fin
+      - MYSQL_ROOT_PASSWORD=root
+
+  back:
+    build: 
+      context: ./nestjs-api
+      dockerfile: Dockerfile    
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 40s ./.docker/entrypoint.sh
+    ports:
+      - 3000:3000
+    volumes: 
+      - ./nestjs-api:/home/node/app
+    extra_hosts: 
+      - "host.docker.internal:172.17.0.1"
+    depends_on: 
+      - db
+
+  front:
+    build:
+      context: ./nextjs-frontend
+      dockerfile: Dockerfile 
+    entrypoint: ./.docker/entrypoint.sh
+    ports:
+      - 3001:3000
+    volumes:
+      - ./nextjs-frontend:/home/node/app
+    extra_hosts: 
+      - "host.docker.internal:172.17.0.1"
+

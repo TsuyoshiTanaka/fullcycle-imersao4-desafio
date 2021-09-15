@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  keycloak:
+    build: .
+    ports:
+      - "8081:8080"
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_USER=postgres
+      - DB_PASSWORD=123
+      - DB_VENDOR=postgres
+      - DB_ADDR=192.168.0.50
+      - DB_PORT=5432
+      - DB_DATABASE=fin
+    # volumes:
+    #   - ./controlepessoal:/opt/jboss/keycloak/themes/ControlePessoal
