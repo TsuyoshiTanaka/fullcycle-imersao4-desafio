@@ -11,8 +11,8 @@ import {
   import { NextPage } from "next";
   import { useRouter } from "next/router";
   import { useForm } from "react-hook-form";
-//   import { Head } from "../../components/Head";
-//   import { Page } from "../../components/Page";
+  import { Head } from "../../components/Head";
+  import { Page } from "../../components/Page";
   import makeHttp from "../../utils/http";
   import {
     TransactionCategoryLabels,
@@ -43,7 +43,8 @@ import {
     }
   
     return keycloak?.authenticated ? (
-      <Container>
+      <Page>
+        <Head title="Nova transação" />
         <Typography component="h1" variant="h4">
           Nova transação
         </Typography>
@@ -119,7 +120,7 @@ import {
             </Grid>
           </Grid>
         </form>
-      </Container>
+      </Page>
     ) : null;
   };
   

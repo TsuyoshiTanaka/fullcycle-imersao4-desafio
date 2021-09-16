@@ -1,100 +1,105 @@
-import { Column, IntegratedFiltering, IntegratedPaging, PagingState, SearchState, SortingState } from "@devexpress/dx-react-grid";
-import { Container, Button, Typography } from "@material-ui/core";
-import { Grid, PagingPanel, SearchPanel, Toolbar, Table, TableHeaderRow } from "@devexpress/dx-react-grid-material-ui";
-import { GetServerSideProps, NextPage } from "next";
-import { Token, validateAuth } from "../../utils/auth";
-import { Transaction } from "../../utils/model";
-import { format, parseISO } from "date-fns";
-import AddIcon from "@material-ui/icons/Add";
-import { useRouter } from "next/router";
-import makeHttp from "../../utils/http";
-
-interface TransactionsPageProps {
+import {
+    Column,
+    IntegratedFiltering,
+    IntegratedPaging,
+    PagingState,
+    SearchState,
+    SortingState,
+  } from "@devexpress/dx-react-grid";
+  import { Button, Typography } from "@material-ui/core";
+  import {
+    Grid,
+    PagingPanel,
+    SearchPanel,
+    Table,
+    TableHeaderRow,
+    Toolbar,
+  } from "@devexpress/dx-react-grid-material-ui";
+  import { NextPage } from "next";
+  import makeHttp from "../../utils/http";
+  import { Transaction } from "../../utils/model";
+  import { parseISO, format } from "date-fns";
+  import AddIcon from "@material-ui/icons/Add";
+  import { useRouter } from "next/router";
+  import { Page } from "../../components/Page";
+  import { withAuth } from "../../hof/withAuth";
+  import { Head } from "../../components/Head";
+  
+  interface TransactionsPageProps {
     transactions: Transaction[];
-}
-
-const columns: Column[] = [
+  }
+  
+  const columns: Column[] = [
     {
-        name: 'payment_date',
-        title: 'Data Pag.',
-        getCellValue: (row: any, columnName: string) => {
-            return format(parseISO(row[columnName].slice(0,10)), "dd/MM/yyyy");
-        }
+      name: "payment_date",
+      title: "Data pag.",
+      getCellValue: (row: any, columnName: string) => {
+        return format(parseISO(row[columnName].slice(0, 10)), "dd/MM/yyyy");
+      },
     },
     {
-        name: 'name',
-        title: 'Nome'
+      name: "name",
+      title: "Nome",
     },
     {
-        name: 'category',
-        title: 'Categoria'
+      name: "category",
+      title: "Categoria",
     },
     {
-        name: 'type',
-        title: 'Operação'
+      name: "type",
+      title: "Operação",
     },
     {
-        name: 'created_at',
-        title: 'Criado em',
-        getCellValue: (row: any, columnName: string) => {
-            return format(parseISO(row[columnName].slice(0,10)), "dd/MM/yyyy");
-        }
+      name: "created_at",
+      title: "Criado em",
+      getCellValue: (row: any, columnName: string) => {
+        return format(parseISO(row[columnName].slice(0, 10)), "dd/MM/yyyy");
+      },
     },
-]
-
-const TransactionsPage: NextPage<TransactionsPageProps> = (props) => {
+  ];
+  
+  const TransactionsPage: NextPage<TransactionsPageProps> = (props) => {
     const router = useRouter();
     return (
-        <Container>
-            <Typography component="h1" variant="h4">
-                Minhas Transações
-            </Typography>
-            <Button
-                startIcon={<AddIcon />}
-                variant={"contained"}
-                color="primary"
-                onClick={() => router.push("/transactions/new")}
-            >
-                Criar
-            </Button>            
-            <Grid rows={props.transactions} columns={columns}>
-                <Table/>
-                <SortingState
-                defaultSorting={[{ columnName: "created_at", direction: "desc" }]}
-                />
-                <SearchState defaultValue="Conta de luz" />
-                <PagingState defaultCurrentPage={0} pageSize={5} />
-                <TableHeaderRow showSortingControls />
-                <IntegratedFiltering />
-                <Toolbar />
-                <SearchPanel />
-                <PagingPanel />
-                <IntegratedPaging />                
-            </Grid>
-        </Container>
+      <Page>
+        <Head title="Minhas transações" />
+        <Typography component="h1" variant="h4">
+          Minhas transações
+        </Typography>
+        <Button
+          startIcon={<AddIcon />}
+          variant={"contained"}
+          color="primary"
+          onClick={() => router.push("/transactions/new")}
+        >
+          Criar
+        </Button>
+        <Grid rows={props.transactions} columns={columns}>
+          <Table />
+          <SortingState
+            defaultSorting={[{ columnName: "created_at", direction: "desc" }]}
+          />
+          <SearchState defaultValue="Conta de luz" />
+          <PagingState defaultCurrentPage={0} pageSize={5} />
+          <TableHeaderRow showSortingControls />
+          <IntegratedFiltering />
+          <Toolbar />
+          <SearchPanel />
+          <PagingPanel />
+          <IntegratedPaging />
+        </Grid>
+      </Page>
     );
-};
-
-export default TransactionsPage;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const auth = validateAuth(ctx.req);
-    if (!auth) {
-        return {
-            redirect: {
-                permanent: false,
-                destination: "/login"
-            }
-        }
-    };
-
-    const token = (auth as Token).token;
-
-    const {data: transactions} = await makeHttp(token).get('transactions');
-
+  };
+  
+  export default TransactionsPage;
+  
+  export const getServerSideProps = withAuth(async (ctx, { token }) => {
+    const { data: transactions } = await makeHttp(token).get("transactions");
+  
     return {
-        props: {
-            transactions
-        }
+      props: {
+        transactions,
+      },
     };
-}
+  });

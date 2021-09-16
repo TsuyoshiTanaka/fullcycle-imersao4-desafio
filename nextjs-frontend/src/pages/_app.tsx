@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 import { SSRCookies, SSRKeycloakProvider } from '@react-keycloak/ssr';
 import { KEYCLOAK_PUBLIC_CONFIG } from '../utils/auth';
 import { parseCookies } from '../utils/cookies';
+import { TenantProvider } from '../components/TenantProvider';
 
 
 function MyApp({ Component, pageProps, cookies }: AppProps & { cookies: any }) {
@@ -28,10 +29,12 @@ function MyApp({ Component, pageProps, cookies }: AppProps & { cookies: any }) {
                     : null
         }}
         >
-            <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Component {...pageProps} />
-            </ThemeProvider>
+            <TenantProvider>
+                <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <Component {...pageProps} />
+                </ThemeProvider>
+            </TenantProvider>
         </SSRKeycloakProvider>
     );
 }
