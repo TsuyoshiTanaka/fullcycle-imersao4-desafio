@@ -8,28 +8,28 @@ export class RequestReportGenerateService {
     constructor(
         @InjectModel(Report)
         private reportModel: typeof Report,
-        @Inject('KAFKA_PRODUCER')
-        private kafkaProducer: Producer,
+        // @Inject('KAFKA_PRODUCER')
+        // private kafkaProducer: Producer,
     ) {
-        this.reportModel.afterCreate((instance, options) => {
-            this.afterCreate(instance);
-        })
+        // this.reportModel.afterCreate((instance, options) => {
+        //     this.afterCreate(instance);
+        // })
     }
 
-    async afterCreate(instance: Report) {
-        this.kafkaProducer.send({
-            topic: 'reports-create',
-            messages: [
-                {
-                    key: 'reports',
-                    value: JSON.stringify({
-                        id: instance.id,
-                        start_date: instance.start_date,
-                        end_date: instance.end_date,
-                        account_id: instance.account_id
-                    })
-                }
-            ]
-        })
-    }
+    // async afterCreate(instance: Report) {
+    //     this.kafkaProducer.send({
+    //         topic: 'reports-create',
+    //         messages: [
+    //             {
+    //                 key: 'reports',
+    //                 value: JSON.stringify({
+    //                     id: instance.id,
+    //                     start_date: instance.start_date,
+    //                     end_date: instance.end_date,
+    //                     account_id: instance.account_id
+    //                 })
+    //             }
+    //         ]
+    //     })
+    // }
 }

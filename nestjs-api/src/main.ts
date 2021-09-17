@@ -10,9 +10,9 @@ async function bootstrap() {
       errorHttpStatusCode: 422,
     }),
   );
-  app.connectMicroservice(makeKafkaOptions());
+//   app.connectMicroservice(makeKafkaOptions());
 
-  await app.startAllMicroservices();
+//   await app.startAllMicroservices();
   await app.listen(3000);
 }
 bootstrap();
