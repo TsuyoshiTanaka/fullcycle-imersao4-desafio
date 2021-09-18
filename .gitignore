@@ -72,5 +72,6 @@ yarn-error.log*
 .vercel
 
 **/dbdata
+**/data
 
 .history/

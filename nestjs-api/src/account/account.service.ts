@@ -15,6 +15,7 @@ export class AccountService {
   }
 
   findAll() {
+    console.log('teste 123')
     return this.accountModel.findAll();
   }
 

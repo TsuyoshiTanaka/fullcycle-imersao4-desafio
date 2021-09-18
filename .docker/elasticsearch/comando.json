@@ -1,0 +1,28 @@
+PUT mysql-server.fin.transactions
+{
+    "mappings":{
+        "properties": {
+            "account_id": {
+                "type": "keyword"
+            },
+            "category": {
+                "type": "keyword"
+            },
+            "name": {
+                "type": "text"
+            },
+            "description": {
+                "type": "text"
+            },
+            "type": {
+                "type": "keyword"
+            },
+            "amount": {
+                "type": "float"
+            },
+            "payment_date": {
+                "type": "date"
+            },
+        }
+    }
+}

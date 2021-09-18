@@ -54,14 +54,14 @@ export class Transaction extends Model {
   @Column({ allowNull: false })
   type: TransactionType;
 
-//   @ForeignKey(() => Account)
-//   @Column({
-//     type: DataType.UUID,
-//     defaultValue: DataType.UUIDV4,
-//     allowNull: false,
-//   })
-//   account_id: string;
+  @ForeignKey(() => Account)
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+    allowNull: false,
+  })
+  account_id: string;
 
-//   @BelongsTo(() => Account)
-//   account: Account;
+  @BelongsTo(() => Account)
+  account: Account;
 }

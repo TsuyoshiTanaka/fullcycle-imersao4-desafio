@@ -4,7 +4,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { TenantGuard } from 'src/tenant/tenant.guard';
 
-// @UseGuards(JwtAuthGuard, TenantGuard)
+@UseGuards(JwtAuthGuard, TenantGuard)
 @Controller('transactions')
 export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}

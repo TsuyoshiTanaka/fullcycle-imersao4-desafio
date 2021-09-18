@@ -1,0 +1,2 @@
+insert into transactions(id, payment_date, name, description, category, amount, type, account_id, created_at, updated_at)
+values ('5b326986-2a13-4b03-907d-ee176f03a571', '2021-09-15 00:00:00', 'transaction 1', 'descrição', 'category1', 66, 'credit',  'f9443944-8ec6-4530-9969-f7e2bc4f0633', '2021-09-01 00:00:00', '2021-09-01 00:00:00');

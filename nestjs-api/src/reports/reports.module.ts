@@ -10,24 +10,24 @@ import { makeKafkaOptions } from 'src/common/kafka-config';
 @Module({
   imports: [
       SequelizeModule.forFeature([Report]),
-    //   ClientsModule.registerAsync([
-    //       {
-    //         name: 'KAFKA_SERVICE',
-    //         useFactory: () => makeKafkaOptions(),
-    //       }
-    //   ]),
+      ClientsModule.registerAsync([
+          {
+            name: 'KAFKA_SERVICE',
+            useFactory: () => makeKafkaOptions(),
+          }
+      ]),
     ],
   controllers: [ReportsController],
   providers: [
       ReportsService, 
       RequestReportGenerateService,
-    //   {
-    //     provide: 'KAFKA_PRODUCER',
-    //     useFactory: async (kafkaService: ClientKafka) => {
-    //         return kafkaService.connect();
-    //     },
-    //     inject: ['KAFKA_SERVICE'],
-    //   },
+      {
+        provide: 'KAFKA_PRODUCER',
+        useFactory: async (kafkaService: ClientKafka) => {
+            return kafkaService.connect();
+        },
+        inject: ['KAFKA_SERVICE'],
+      },
     ],
 })
 export class ReportsModule {}
